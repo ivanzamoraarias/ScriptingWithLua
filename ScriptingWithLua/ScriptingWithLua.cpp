@@ -33,7 +33,7 @@ void finishLua(lua_State* L) {
 	lua_close(L);
 }
 
-int getPlayerObjectFromLua(lua_State*& L, Player& player, bool& retflag);
+int getPlayerObjectFromLua(lua_State*& L, Player& player);
 
 int main()
 {
@@ -52,14 +52,35 @@ int main()
 		return 0;
 	}
 
-	lua_getglobal(L, "addSomething");
+	lua_getglobal(L, "getPlayer");
 	if (lua_isfunction(L, -1)) {
-		lua_pushnumber(L, 3.5f); // a
-		lua_pushnumber(L, 8.5f); // b
+		lua_pushnumber(L, 0); // index 0 as parameter  
 
-		if (checkLua(L, lua_pcall(L, 2, 1, 0))) {
-			float result = (float)lua_tonumber(L, 1);
-			std::cout << "called a function: result=  " << result << std::endl;
+		if (checkLua(L, lua_pcall(L, 1, 1, 0))) { // call function with one argument , it is the second argument of lua_pcal
+			if (lua_istable(L, -1)) {
+				lua_pushstring(L, "Name");
+				lua_gettable(L, -2);
+				player.name = lua_tostring(L, -1);
+				lua_pop(L, 1);
+
+				lua_pushstring(L, "Role");
+				lua_gettable(L, -2);
+				player.role = lua_tostring(L, -1);
+				lua_pop(L, 1);
+
+				lua_pushstring(L, "Ability");
+				lua_gettable(L, -2);
+				player.ability = lua_tostring(L, -1);
+				lua_pop(L, 1);
+
+				lua_pushstring(L, "Level");
+				lua_gettable(L, -2);
+				player.level = (int)lua_tonumber(L, -1);
+				lua_pop(L, 1);
+
+				std::cout << player.name << " " << player.role << " " << player.ability << " " << player.level << std::endl;
+
+			}
 		}
 	}
 

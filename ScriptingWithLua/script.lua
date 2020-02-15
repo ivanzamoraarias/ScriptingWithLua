@@ -1,15 +1,13 @@
--- object is a table
-player = {
+players = {}
+players[0] = {
 	Role = "Ardilla",
 	Name = "Pilla",
 	Ability = "trolldom",
-	Level = 80
-}
+	Level =90
+	}
 
-players = {}
-player[0] = player
-player[1]= {
-	Role = "Ardilla",
+players[1]= {
+	Role = "Dino",
 	Name = "Pilla",
 	Ability = "trolldom",
 	Level = 80}
